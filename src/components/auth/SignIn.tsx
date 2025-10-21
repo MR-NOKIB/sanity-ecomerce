@@ -7,25 +7,25 @@ const initialState = {
     message: '',
 }
 
-type signUpProps = {
+type SignInProps = {
     action: (presState: any, formData: FormData) => Promise<{ message: string } | undefined>
 }
 
 
-const SignUp = ({ action }: signUpProps) => {
+const SignIn = ({ action }: SignInProps) => {
 
     const [state, formAction, isPending] = useActionState(action, initialState)
 
     return (
         <Form action={formAction} className="max-w-md mx-auto my-16 p-8 bg-white rounded-lg shadow-md">
             <h1 className="text-2xl font-bold text-center mb-2">
-                Join The Deal Revolution!
+                Welcome Back!
             </h1>
             <p className="text-center text-sm text-rose-600 font-semibold mb-2">
-                🔥 LIMITED TIME OFFER 🔥
+                🔥 MEMBER EXCLUSIVE 🔥
             </p>
             <p className="text-center text-sm text-gray-600  mb-6">
-                sign up now and get 90% OFF your first order!
+                sign in to access your exclusive deals.
             </p>
 
 
@@ -66,23 +66,23 @@ const SignUp = ({ action }: signUpProps) => {
 
                 {/* Copywriting */}
                 <div className=" text-center">
-                    <p className="text-xs text-gray-500 mb-2"> ✨ Only 127 welcome bonus packages remaining!</p>
-                    <p className="text-xs text-gray-500 mb-4"> 🕒 Offer expires in 13:45 </p>
+                    <p className="text-xs text-gray-500 mb-2"> ✨ Member saves an extra 15% on all orders!</p>
+                    <p className="text-xs text-gray-500 mb-4"> 🕒 Plus get free shipping on orders over $15! </p>
                 </div>
 
                 {/* Submit */}
                 <button
                     type="submit"
                     disabled={isPending}
-                    className={` w-full bg-rose-600 text-white py-3 rounded-md hover:bg-rose-700 transition-colors font-medium flex items-center justify-center gap-2 ${isPending ? 'cursor-not-allowed' : ''}`}
+                    className={` w-full bg-rose-600 text-white py-3 rounded-md hover:bg-rose-700 transition-colors font-medium flex items-center justify-center gap-2 cursor-pointer ${isPending ? 'cursor-not-allowed' : ''}`}
                 >
                     {isPending ? (
                         <React.Fragment>
                             <Loader2 className="h-4 w-4 animate-spin" />
-                            CREATING ACCOUNT...
+                            SIGNING IN...
                         </React.Fragment>
                     ) : (
-                        'CREATE ACCOUNT'
+                        'SIGN IN'
                     )}
                 </button>
                 {state?.message && state.message.length > 0 && (
@@ -95,4 +95,4 @@ const SignUp = ({ action }: signUpProps) => {
     )
 }
 
-export default SignUp
+export default SignIn

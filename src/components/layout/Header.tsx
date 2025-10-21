@@ -1,5 +1,8 @@
 'use client'
+import { logoutUser } from '@/actions/auth'
+import { User } from '@prisma/client'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
 
@@ -15,7 +18,12 @@ const AnnouncementBar = () => {
     )
 }
 
-const Header = () => {
+type HeaderProps = {
+    user: Omit<User, "passwordHash"> | null;
+}
+
+const Header = ({ user }: HeaderProps) => {
+    const router = useRouter();
 
     const [isOpen, setIsOpen] = useState<boolean>(true);
     const [prevScrollY, setPrevScrollY] = useState<number>(0);
@@ -66,17 +74,39 @@ const Header = () => {
                             </nav>
                         </div>
 
-                        <Link href={'#'}>
-                            DEAL
+                        <Link href={'#'} className='absolute left-1/2 -translate-x-1/2'>
+                            <span className='text-xl sm:text-2xl font-bold tracking-wide'>
+                                DEAL
+                            </span>
                         </Link>
 
                         <div className='flex flex-1 justify-end items-center gap-2'>
                             <button className='text-gray-700 hover:text-gray-900 hidden sm:block cursor-pointer'>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg>
                             </button>
-
-                            <Link href="/auth/sign-in">Sign In</Link>
-                            <Link href="/auth/sign-up">Sign Up</Link>
+                            {user ? (
+                                <div className='flex items-center gap-2 sm:gap-4'>
+                                    <span className='text-sm  text-gray-700 hidden md:block'>
+                                        {user.email}
+                                    </span>
+                                    <Link
+                                        href={'#'}
+                                        className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'
+                                        onClick={async (e) => {
+                                            e.preventDefault();
+                                            await logoutUser();
+                                            router.refresh();
+                                        }}
+                                    >
+                                        Sign Out
+                                    </Link>
+                                </div>
+                            ) : (
+                                <React.Fragment>
+                                    <Link href="/auth/sign-in" className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>Sign In</Link>
+                                    <Link href="/auth/sign-up" className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>Sign Up</Link>
+                                </React.Fragment>
+                            )}
 
                             <button className='text-gray-700 hover:text-gray-900 relative'>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-shopping-cart-icon lucide-shopping-cart"><circle cx="8" cy="21" r="1" /><circle cx="19" cy="21" r="1" /><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" /></svg>
