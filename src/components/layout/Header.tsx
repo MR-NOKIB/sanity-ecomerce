@@ -67,7 +67,7 @@ const Header = () => {
                         </div>
 
                         <Link href={'#'}>
-                            Link
+                            DEAL
                         </Link>
 
                         <div className='flex flex-1 justify-end items-center gap-2'>
